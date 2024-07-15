@@ -15,8 +15,8 @@ const parseAddress = async (address) => {
             displayError(data.Error);
          } else if (data.ParseError) {
             displayError(data.ParseError);
-         } else if (data.TypeError) {
-            displayError(data.TypeError);
+         } else if (data.RepeatedLabelError) {
+            displayError(data.RepeatedLabelError);
          // Otherwise display the address parse results
          } else {
             displayAddress(data);

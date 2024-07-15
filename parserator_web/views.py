@@ -28,9 +28,9 @@ class AddressParse(APIView):
         except ParseError:
             return Response({'ParseError': 'Unable to parse this address'}, status=400)
         except TypeError:
-            return Response({'TypeError': 'The submitted address does not match the expected type (string)'}, status=400)
+            return Response({'RepeatedLabelError': 'Unable to parse this value due to repeated labels. Our team has been notified of the error.'}, status=400)
         except Exception as e:
-            return Response({'Error': e}, status=400)
+            return Response({'Error': 'Error ' + e}, status=400)
 
     def parse(self, address):
         address_components, address_type = usaddress.tag(address)

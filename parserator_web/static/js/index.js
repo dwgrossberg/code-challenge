@@ -1,26 +1,35 @@
 // Pass the address string to the api/parse API endpoint
 const parseAddress = async (address) => {
    const url = "api/parse/?address=" + address
-   const response = await fetch(url, {
-      method: "GET"
-   })
-   .then((response) => response.json())
-   .then((data) => {
-      // Handle and display error messages if required
-      if (data.error) {
-         console.log(data.error)
-         displayError(data.Error);
-      } else if (data.ParseError) {
-         displayError(data.ParseError);
-      } else if (data.TypeError) {
-         displayError(data.TypeError);
-      // Otherwise display the address parse results
+   try {
+      const response = await fetch(url, {
+         method: "GET"
+      });
+      // Check that the response is valid
+      if (!response.ok) {
+         throw new Error(`Response status: ${response.status}`);
       } else {
+         const data = await response.json();
+         // Check for input string API errors
+         if (data.Error) {
+            displayError(data.Error);
+         } else if (data.ParseError) {
+            displayError(data.ParseError);
+         } else if (data.TypeError) {
+            displayError(data.TypeError);
+         // Otherwise display the address parse results
+         } else {
+            displayAddress(data);
+         }
          displayAddress(data);
-      }
-   });
-}
+      } 
+   // Catch any error messages -- 500 status
+   } catch (error) {
+      displayError(error.message);
+   }
+};
 
+// Display the address response to the DOM
 const displayAddress = (addressData) => {
    const addressResults = document.getElementById("address-results");
    // Show results table
@@ -45,6 +54,19 @@ const displayAddress = (addressData) => {
    }
 }
 
+// Display any errors to the user
+const displayError = (error) => {
+   const errorContainer = document.getElementById("error-container");
+   const errorText = document.getElementById("error-message");
+   errorContainer.style.display = "flex";
+   console.log(error);
+   if (error === "Response status: 500") {
+      errorText.textContent = "Unable to parse this value due to repeated labels. Our team has been notified of the error.";
+   } else {
+      errorText.textContent = error;
+   }
+}
+
 // Handle form submission
 const addressForm = document.getElementsByTagName("form")[0];
 console.log(addressForm);
@@ -55,4 +77,12 @@ addressForm.addEventListener("submit", (e) => {
    if (addressData && addressData.trim()) {
       parseAddress(addressData);
    }
+})
+
+// Handle close error message event
+const errorContainer = document.getElementById("error-container");
+const errorCloseButton = document.getElementById("close-button");
+errorCloseButton.addEventListener("mousedown", () => {
+   document.getElementById("address").value = "";
+   errorContainer.style.display = "None";
 })

@@ -1,7 +1,11 @@
-// Pass the address string to the api/parse API endpoint
+// This function triggers an eslint Parsing error: The keyword 'const' is reserved,
+// which I was unable to resolve in a satisfactory manner
 const parseAddress = async (address) => {
-   // This function triggers an eslint Parsing error: The keyword 'const' is reserved,
-   // which I was unable to resolve in a satisfactory manner
+   /**
+    * Sends a user-inputted address to the api/parse API endpoint and calls a function to display
+    * the results or the error, if applicable.
+    * @param {string} address The address to parse, input by the user
+    */
    const url = "api/parse/?address=" + address
    try {
       const response = await fetch(url, {
@@ -31,8 +35,12 @@ const parseAddress = async (address) => {
    }
 };
 
-// Display the address response to the DOM
 const displayAddress = (addressData) => {
+   /**
+    * Displays the address response to the DOM if the parse was successful.
+    * @param {Object} addressData   A dictionary object containing the input_string,
+    * address_components, and address_type.
+    */
    // Clear input value
    document.getElementById("address").value = "";
    // Remove error if applicable
@@ -60,8 +68,11 @@ const displayAddress = (addressData) => {
    }
 }
 
-// Display any errors to the user
 const displayError = (error) => {
+   /**
+    * Displays any errors encountered to the user via the DOM
+    * @param {Error} error The error data returned from the api/parse API endpoint
+    */
    // Clear address results if applicable
    document.getElementById("address-results").style.display = "None";
    const errorContainer = document.getElementById("error-container");

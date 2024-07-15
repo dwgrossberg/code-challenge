@@ -25,7 +25,7 @@ const parseAddress = async (address) => {
          }
          displayAddress(data);
       } 
-   // Catch any error messages -- 500 status
+   // Catch any error messages -- 500 statusq
    } catch (error) {
       displayError(error.message);
    }
@@ -33,6 +33,10 @@ const parseAddress = async (address) => {
 
 // Display the address response to the DOM
 const displayAddress = (addressData) => {
+   // Clear input value
+   document.getElementById("address").value = "";
+   // Remove error if applicable
+   document.getElementById("error-container").style.display = "None";
    const addressResults = document.getElementById("address-results");
    // Show results table
    addressResults.style.display = "block";
@@ -58,6 +62,8 @@ const displayAddress = (addressData) => {
 
 // Display any errors to the user
 const displayError = (error) => {
+   // Clear address results if applicable
+   document.getElementById("address-results").style.display = "None";
    const errorContainer = document.getElementById("error-container");
    const errorText = document.getElementById("error-message");
    errorContainer.style.display = "flex";

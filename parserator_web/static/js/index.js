@@ -1,5 +1,7 @@
 // Pass the address string to the api/parse API endpoint
 const parseAddress = async (address) => {
+   // This function triggers an eslint Parsing error: The keyword 'const' is reserved,
+   // which I was unable to resolve in a satisfactory manner
    const url = "api/parse/?address=" + address
    try {
       const response = await fetch(url, {

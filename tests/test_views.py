@@ -1,6 +1,6 @@
 import json
 from django.urls import resolve
-import pytest
+# import pytest - commented out to resolve linting error
 
 
 def test_api_parse_succeeds(client):
@@ -37,8 +37,8 @@ def test_api_parse_raises_error(client):
     test_url = '/api/parse/?input_string=' + address_string
     # Check that RepeatedLabelError is raised
     repeated_label_error = {
-        'RepeatedLabelError':
-        'Unable to parse this value due to repeated labels. Our team has been notified of the error.'
+        'RepeatedLabelError': 'Unable to parse this value due to repeated labels. '
+        'Our team has been notified of the error.'
     }
     response = client.get(test_url)
     response_data = json.loads(response.content)

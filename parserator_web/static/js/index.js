@@ -78,9 +78,10 @@ const displayError = (error) => {
    const errorContainer = document.getElementById("error-container");
    const errorText = document.getElementById("error-message");
    errorContainer.style.display = "flex";
-   console.log(error);
    if (error === "Response status: 500") {
       errorText.textContent = "Unable to parse this value due to repeated labels. Our team has been notified of the error.";
+   } else if (error === "no_value") {
+      errorText.textContent = "Please provide a value to parse."
    } else {
       errorText.textContent = error;
    }
@@ -93,8 +94,11 @@ addressForm.addEventListener("submit", (e) => {
    e.preventDefault();
    const addressData = new FormData(e.target).get("address");
    // Check for blank string or string of whitespace
-   if (addressData && addressData.trim()) {
+   if (addressData) {
       parseAddress(addressData);
+   } else {
+      // Otherwise display error message
+      displayError("no_value")
    }
 })
 

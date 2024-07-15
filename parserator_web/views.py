@@ -1,4 +1,5 @@
 import usaddress
+from usaddress import RepeatedLabelError
 from django.views.generic import TemplateView
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -16,6 +17,9 @@ class AddressParse(APIView):
     def get(self, request):
         # Address string passed in via request params
         address = request.query_params.get('address')
+        # Check that request params have valid structure
+        if 'address' not in request.query_params:
+            raise ParseError
         # Create the response values
         try:
             address_components, address_type = self.parse(address)
@@ -25,9 +29,7 @@ class AddressParse(APIView):
                 'address_type': address_type
             })
         # Handle exceptions and errors
-        except ParseError:
-            return Response({'ParseError': 'Unable to parse this address'}, status=400)
-        except TypeError:
+        except (RepeatedLabelError, TypeError):
             return Response({'RepeatedLabelError': 'Unable to parse this value due to '
                             'repeated labels. Our team has been notified of the error.'},
                             status=400)
